@@ -1,0 +1,10 @@
+maven integration
+ansible 
+ansiColor
+Git
+role-based auth strategy
+ssh
+Git plugin
+Git client
+Job DSL 
+
