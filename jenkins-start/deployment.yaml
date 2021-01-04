@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-main
+  namespace: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-main
+  template:
+    metadata:
+      labels:
+        app: jenkins-main
+    spec:
+      containers:
+      - name: jenkins-main
+        image: jenkins/jenkins:lts
+        ports:
+        - containerPort: 8080
+          name: http-port
+        - containerPort: 50000
+          name: jnlp-port
+        volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+          - name: dockersocket
+            mountPath: /var/run/docker.sock
+      volumes:
+          # NOT FOR PRODUCTION! Set a PVC so you won't lose the jenkins files!
+        - name: jenkins-home
+          emptyDir: {}
+          # Not so safe, see https://medium.com/better-programming/securely-building-container-images-on-kubernetes-cef0c4c3cc24
+          # Also most likely deprecateed since k8s dropped docker
+        - name: dockersocket
+          hostPath:
+            path: /var/run/docker.sock

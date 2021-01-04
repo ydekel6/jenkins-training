@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webhookrelayd
+spec:
+  containers:
+  - name: webhookrelayd
+    image: webhookrelay/webhookrelayd
+    env:
+      - name: RELAY_KEY
+        valueFrom:
+          secretKeyRef:
+            name: whr-credentials
+            key: key
+      - name: RELAY_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: whr-credentials
+            key: secret
+      - name: BUCKETS
+        value: github-jenkins
+  restartPolicy: Always
